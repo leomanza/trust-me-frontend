@@ -15,11 +15,9 @@ import {
 } from "@chakra-ui/react";
 import { NotAllowedIcon } from "@chakra-ui/icons";
 import React from "react";
-const MistrustModal = ({ state, setState, onConfirm }) => {
+const MistrustModal = (props: any) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
-
-  const initialRef = React.useRef();
-  const finalRef = React.useRef();
+  const {state, setState, onConfirm} = props;
   return (
     <>
       <Box  px={4}>
@@ -35,8 +33,6 @@ const MistrustModal = ({ state, setState, onConfirm }) => {
         </Button>
       </Box>
       <Modal
-        initialFocusRef={initialRef}
-        finalFocusRef={finalRef}
         isOpen={isOpen}
         onClose={onClose}
       >
@@ -48,7 +44,6 @@ const MistrustModal = ({ state, setState, onConfirm }) => {
             <FormControl>
               <FormLabel>Near Account</FormLabel>
               <Input
-                ref={initialRef}
                 placeholder="john.near"
                 value={state.accountId}
                 onChange={(event) => {

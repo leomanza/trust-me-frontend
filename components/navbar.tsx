@@ -29,9 +29,9 @@ const NavLink = ({ children, path }: { children: ReactNode; path: string }) => (
   </Box>
 );
 
-export default function Navbar({ account, onSignIn, onSignOut }) {
+export default function Navbar(props: any) {
   const { isOpen, onOpen, onClose } = useDisclosure();
-
+  const { account, onSignIn, onSignOut } = props;
   return (
     <>
       <Box  px={4}>

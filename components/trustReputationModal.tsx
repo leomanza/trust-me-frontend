@@ -20,14 +20,15 @@ import {
 } from "@chakra-ui/react";
 import { QuestionOutlineIcon } from "@chakra-ui/icons";
 import React from "react";
-const ReputationContent = ({ reputationCount, onConfirm }) => {
+const ReputationContent = (props: any) => {
   const { isOpen, onToggle } = useDisclosure();
+  const { reputationCount, onConfirm } = props;
   return (
     <>
       <Button
         onClick={() => {
           onConfirm();
-          console.log('inside',reputationCount);
+          console.log("inside", reputationCount);
           onToggle();
         }}
         disabled={isOpen}
@@ -54,11 +55,9 @@ const ReputationContent = ({ reputationCount, onConfirm }) => {
   );
 };
 
-const TrustReputationModal = ({ state, setState, onConfirm }) => {
+const TrustReputationModal = (props: any) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
-
-  const initialRef = React.useRef();
-  const finalRef = React.useRef();
+  const { state, setState, onConfirm } = props;
   return (
     <>
       <Box px={4}>
@@ -74,8 +73,6 @@ const TrustReputationModal = ({ state, setState, onConfirm }) => {
         </Button>
       </Box>
       <Modal
-        initialFocusRef={initialRef}
-        finalFocusRef={finalRef}
         isOpen={isOpen}
         onClose={onClose}
       >
@@ -88,7 +85,6 @@ const TrustReputationModal = ({ state, setState, onConfirm }) => {
               <FormControl>
                 <FormLabel>Near Account</FormLabel>
                 <Input
-                  ref={initialRef}
                   placeholder="john.near"
                   value={state.accountId}
                   onChange={(event) => {

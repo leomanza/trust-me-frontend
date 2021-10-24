@@ -74,7 +74,11 @@ const Home: NextPage = () => {
       accountId: "",
       comment: "",
       relatedTx: "",
-      reputationCount: {},
+      reputationCount: {
+        trustCount: 0,
+        mistrustCount: 0,
+        exists: false
+      }
     });
   };
 
