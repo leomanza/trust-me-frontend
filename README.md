@@ -1,7 +1,7 @@
 # NEAR NCD Bootcamp - Level 2 :: 1-day course on building full stack dApps on NEAR
 
 This repository contains an implementation of the front-end and NEAR protocolor interaction via RPC API.
-The smart contract to interact is the one implemented on the NCD Bootcamp - Level 1. [TrustMe Smart Contract]/https://github.com/leomanza/trust-me).
+The smart contract to interact is the one implemented on the NCD Bootcamp - Level 1. [TrustMe Smart Contract](https://github.com/leomanza/trust-me).
 
 **Prerequisites**
 In order to interact with the smart contract, we need it deployed. Once you have it, copy the smart contract account Id that we are going to use on the daap.
@@ -11,7 +11,7 @@ In order to interact with the smart contract, we need it deployed. Once you have
 ### Local Environment Setup
 1. clone this repo locally
 ```bash
-git clone ...
+git clone https://github.com/leomanza/trust-me-frontend.git
 ```
 2. install dependencies
 ```bash
