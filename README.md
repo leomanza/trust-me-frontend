@@ -11,7 +11,7 @@ In order to interact with the smart contract, we need it deployed. Once you have
 ### Local Environment Setup
 1. clone this repo locally
 ```bash
-git clone ...
+git clone https://github.com/leomanza/trust-me-frontend.git
 ```
 2. install dependencies
 ```bash
