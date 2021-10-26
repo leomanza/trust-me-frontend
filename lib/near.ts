@@ -25,7 +25,11 @@ export const getWallet = async () => {
 
 export const getContract = async (wallet: any) => {
   return new Contract(wallet.account(), CONTRACT_ID, {
-    viewMethods: ["getConfianza"],
+    viewMethods: [
+      "getConfianza",
+      "getTopTrusted",
+      "getBottomTrusted",
+    ],
     changeMethods: ["confiar", "desconfiar"],
     sender: wallet.account(),
   });

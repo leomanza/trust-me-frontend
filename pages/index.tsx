@@ -13,10 +13,15 @@ import {
   Badge,
   Spinner,
 } from "@chakra-ui/react";
-import { CheckCircleIcon, NotAllowedIcon, ViewIcon } from "@chakra-ui/icons";
+import {
+  ViewIcon,
+  WarningIcon,
+  StarIcon,
+} from "@chakra-ui/icons";
 import TrustModal from "../components/trustModal";
 import MistrustModal from "../components/mistrustModal";
 import TrustReputationModal from "../components/trustReputationModal";
+import RankingModal from "../components/rankingModal";
 const Home: NextPage = () => {
   const [loading, setLoading] = useState(true);
   const [wallet, setWallet] = useState();
@@ -28,8 +33,10 @@ const Home: NextPage = () => {
     reputationCount: {
       trustCount: 0,
       mistrustCount: 0,
-      exists: false
+      exists: false,
     },
+    top: "",
+    rankingData: [],
   });
 
   useEffect(() => {
@@ -77,8 +84,10 @@ const Home: NextPage = () => {
       reputationCount: {
         trustCount: 0,
         mistrustCount: 0,
-        exists: false
-      }
+        exists: false,
+      },
+      top: "",
+      rankingData: [],
     });
   };
 
@@ -96,7 +105,7 @@ const Home: NextPage = () => {
         reputationCount: {
           trustCount: result.trustCount,
           mistrustCount: result.mistrustCount,
-          exists: true
+          exists: true,
         },
       });
       clearFields();
@@ -120,7 +129,7 @@ const Home: NextPage = () => {
         reputationCount: {
           trustCount: result.trustCount,
           mistrustCount: result.mistrustCount,
-          exists: true
+          exists: true,
         },
       });
       console.log(result);
@@ -144,13 +153,49 @@ const Home: NextPage = () => {
             ? {
                 trustCount: result.trustCount,
                 mistrustCount: result.mistrustCount,
-                exists: true
+                exists: true,
               }
             : {
-              trustCount: 0,
-              mistrustCount: 0,
-              exists: false
-            },
+                trustCount: 0,
+                mistrustCount: 0,
+                exists: false,
+              },
+      });
+      console.log(result);
+    } catch (e) {
+      console.log(e);
+    }
+    setLoading(false);
+  };
+
+  const getTopTrusted = async () => {
+    setLoading(true);
+    try {
+      const contract = await getContract(wallet);
+      const result: any = await contract.getTopTrusted({
+        limit: parseInt(state.top),
+      });
+      setState({
+        ...state,
+        rankingData: result,
+      });
+      console.log(result);
+    } catch (e) {
+      console.log(e);
+    }
+    setLoading(false);
+  };
+
+  const getLessTrusted = async () => {
+    setLoading(true);
+    try {
+      const contract = await getContract(wallet);
+      const result: any = await contract.getBottomTrusted({
+        limit: parseInt(state.top),
+      });
+      setState({
+        ...state,
+        rankingData: result,
       });
       console.log(result);
     } catch (e) {
@@ -210,6 +255,22 @@ const Home: NextPage = () => {
                 setState={setState}
                 onConfirm={getTrustLevel}
               ></TrustReputationModal>
+              <RankingModal
+                state={state}
+                setState={setState}
+                onConfirm={getTopTrusted}
+                caption="Top Trusted Accounts"
+                buttonText="Get Top Trusted Accounts"
+                icon={<StarIcon />}
+              ></RankingModal>
+              <RankingModal
+                state={state}
+                setState={setState}
+                onConfirm={getLessTrusted}
+                caption="Less Trusted Accounts"
+                buttonText="Get Less Trusted Accounts"
+                icon={<WarningIcon />}
+              ></RankingModal>
               <Box px={4}>
                 <Button
                   variant={"outline"}
