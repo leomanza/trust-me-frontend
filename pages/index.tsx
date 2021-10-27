@@ -1,5 +1,14 @@
 import { useEffect, useState } from "react";
-import { CONTRACT_ID, gas, getWallet, getContract } from "../lib/near";
+import {
+  CONTRACT_ID,
+  getWallet,
+  getContract,
+  trust,
+  mistrust,
+  getConfidenceValues,
+  getTopTrustedAccounts,
+  getLessTrustedAccounts,
+} from "../lib/near";
 import type { NextPage } from "next";
 import Head from "next/head";
 import Navbar from "../components/navbar";
@@ -13,18 +22,15 @@ import {
   Badge,
   Spinner,
 } from "@chakra-ui/react";
-import {
-  ViewIcon,
-  WarningIcon,
-  StarIcon,
-} from "@chakra-ui/icons";
+import { ViewIcon, WarningIcon, StarIcon } from "@chakra-ui/icons";
 import TrustModal from "../components/trustModal";
 import MistrustModal from "../components/mistrustModal";
 import TrustReputationModal from "../components/trustReputationModal";
 import RankingModal from "../components/rankingModal";
+import { WalletConnection } from "near-api-js";
 const Home: NextPage = () => {
   const [loading, setLoading] = useState(true);
-  const [wallet, setWallet] = useState();
+  const [wallet, setWallet] = useState<WalletConnection>();
   const [signInAccountId, setSignInAccountId] = useState("");
   const [state, setState] = useState({
     accountId: "",
@@ -56,7 +62,7 @@ const Home: NextPage = () => {
   const signIn = () => {
     setLoading(true);
     try {
-      wallet.requestSignIn(CONTRACT_ID, "Trust-Me contract");
+      wallet!.requestSignIn(CONTRACT_ID, "Trust-Me contract");
     } catch (e) {
       console.log(e);
     }
@@ -66,7 +72,7 @@ const Home: NextPage = () => {
   const signOut = () => {
     setLoading(true);
     try {
-      wallet.signOut();
+      wallet!.signOut();
       localStorage.removeItem("near-api-js:keystore:lean.testnet:testnet");
       clearFields();
       setSignInAccountId("");
@@ -94,8 +100,7 @@ const Home: NextPage = () => {
   const trustOnAccount = async () => {
     setLoading(true);
     try {
-      const contract = await getContract(wallet);
-      const result = await contract.confiar({
+      const result = await trust(wallet!, {
         accountId: state.accountId,
         comment: state.comment,
         relatedTx: state.relatedTx,
@@ -118,8 +123,8 @@ const Home: NextPage = () => {
   const mistrustOnAccount = async () => {
     setLoading(true);
     try {
-      const contract = await getContract(wallet);
-      const result = await contract.desconfiar({
+      // const contract = await getContract(wallet);
+      const result = await mistrust(wallet!, {
         accountId: state.accountId,
         comment: state.comment,
         relatedTx: state.relatedTx,
@@ -142,8 +147,7 @@ const Home: NextPage = () => {
   const getTrustLevel = async () => {
     setLoading(true);
     try {
-      const contract = await getContract(wallet);
-      const result: any = await contract.getConfianza({
+      const result: any = await getConfidenceValues(wallet!, {
         accountId: state.accountId,
       });
       setState({
@@ -171,8 +175,7 @@ const Home: NextPage = () => {
   const getTopTrusted = async () => {
     setLoading(true);
     try {
-      const contract = await getContract(wallet);
-      const result: any = await contract.getTopTrusted({
+      const result: any = await getTopTrustedAccounts(wallet!, {
         limit: parseInt(state.top),
       });
       setState({
@@ -189,8 +192,7 @@ const Home: NextPage = () => {
   const getLessTrusted = async () => {
     setLoading(true);
     try {
-      const contract = await getContract(wallet);
-      const result: any = await contract.getBottomTrusted({
+      const result: any = await getLessTrustedAccounts(wallet!, {
         limit: parseInt(state.top),
       });
       setState({
